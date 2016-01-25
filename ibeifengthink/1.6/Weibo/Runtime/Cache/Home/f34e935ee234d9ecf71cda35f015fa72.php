@@ -1,0 +1,1 @@
+<?php if (!defined('THINK_PATH')) exit();?>前台 User控制器 index方法
