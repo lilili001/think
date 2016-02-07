@@ -6,7 +6,7 @@
  
 $users=array('baidu'=>'李彦宏','alibaba'=>'马云','360'=>'周鸿祎','3602'=>'周鸿祎');
 list($name,$value)=each($users);
-echo $name;//baidu
+echo $name;//百度
 echo '<br/>----------------------------------<br/>';
 
 //array_unique()它会删除掉里面相同值的元素 返回新数组

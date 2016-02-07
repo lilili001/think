@@ -7,4 +7,8 @@
  */
 $fruits = array("d" => "lemon", "a" => "orange", "b" => "banana", "c" => "apple");
 extract($fruits);
+
 echo $a;
+
+echo $d;
+

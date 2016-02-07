@@ -1,9 +1,10 @@
 <?php
      $str = '<strong>我是吴祁！\n \/</strong> ';
      //echo trim($str)
+
      echo nl2br("This is a Teacher!\nThis is a Student!");
      echo htmlentities($str).'<br/>1';
-     
+
      echo htmlspecialchars('<strong>我是吴祁！\n \/</strong>') ;
      echo strip_tags('<strong>我是吴祁！</strong>'); //去掉了<strong>
      

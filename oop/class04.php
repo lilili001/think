@@ -31,6 +31,10 @@ class NbaPlayer extends Human{
          $this->team = $team;
          $this->playernumber = $playernumber;
          
+<<<<<<< HEAD
+=======
+         echo $this->height.' 1111111<br/>';
+>>>>>>> 4488406627bafc430f9cbf2b862eef687d9246ee
          echo $this->isHungery."<br/>";
     }
     //析构函数 __destruck  在程序执行结束的时候自动调用
@@ -71,4 +75,8 @@ $jordan = new NbaPlayer("joana","198","98kg","bull","123");
 $jordan->eat("apple");
 //echo $jordan->age."<br/>";//报错 不能访问私有属性 但是在类里面是可以访问
 $jordan->getAge();
+<<<<<<< HEAD
 //$jordan->height;//报错 不能在类外部访问 protected的属性
+=======
+$jordan->height;//报错 不能在类外部访问 protected的属性
+>>>>>>> 4488406627bafc430f9cbf2b862eef687d9246ee

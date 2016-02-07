@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+ 模板中应用控制器变量
+ 模板中方法应用 md5 mb_str等
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>这是默认主题default下User控制器的index文件<br/>
+            user：<b style="color:red;"><{$user}></b><br/>
+            
+            <!--数组有两种输出方法 [] 和 .  -->
+            data_name:<b style="color:red;"><{$data['user']}></b>
+            data_email:<b style="color:red;"><{$data.email}></b><br/>
+            
+            <!--对象有两种输出方法：-> 和 :  -->
+            obj_name:<b style="color:red;"><{$obj->name}></b>
+            obj_name:<b style="color:red;"><{$obj:name}></b><br/><br/>
+            
+            <!--以下是系统变量 可以通过刷新文件目录查看cache的生成文件 来查看原生
+            <{$Think.server.script_name}> //$_SERVER['SCRIPT_NAME'] <br/>
+            <{$Think.session.admin}> //$_SESSION['admin']<br/>
+            <{$Think.get.user}> //$_GET['user']<br/>
+            <{$Think.post.user}> //$_POST['user']<br/>
+            <{$Think.request.user}> //$_REQUEST['user']<br/>
+            <{$Think.cookie.name}> //$_COOKIE['name']<br/>
+            //ThinkPHP的系统变量<br/>
+            <{$Think.const.APP_PATH}> //目录<br/>
+            <{$Think.config.url_model}> //URL模式<br/>
+            <{$Think.lang.var_error}> //语言变量<br/>
+            
+            //ThinkPHP的系统变量<br/><br/>
+            <{$Think.const.APP_PATH}>  <br/>
+            <{$Think.config.url_model}> //URL模式<br/>
+            <{$Think.lang.var_error}> //语言变量
+            --> 
+            
+            <!--使用函数
+            md5加密user: <{$user|md5}>
+            -->
+            <br/>
+            前面输出变量，在后面定义<br/>
+            <{$user|mb_substr=0,3,'UTF-8'}><br/><br/>
+            
+            这句话的作用是将$date时间戳转化为日期格式，传参 $date 和 "Y-m-d H:i:s"两个参数,###的作用是将$date作为第二个参数<br/>
+            <{$date|date="Y-m-d H:i:s",###}><br/><br/>
+            
+            
+            多个函数用"|"隔开即可<br/>
+            <{$user|mb_substr=0,3,'UTF-8'|md5}><br/><br/>
+            
+            PS：如果你觉得以上写法需要在脑海里二次翻译，太过于麻烦，那么可以用以下的格式写法：{: 普通php写法 }<br/>
+            <{:md5(mb_substr($user,0,3,'UTF-8'))}><br/><br/>
+            
+            当传递过来的变量如果没有值的时候，模版提供了默认值输出功能。<br/>
+            <{$nodate|default='没有数据！'}><br/><br/>
+            
+            我们可以在模版中使用运算符，包括对“+” 、 “-” 、 “*” 、 “/” 、 “%” 、 “--”和“++” 的支持。<br/>
+            <{$num+10}><br/>
+            <{$num+getNum()}> getNum函数在Weibo/Common/Common/function.php中<br/><br/>
+            
+            模版还支持三元运算符：
+            <{$withdata ? '$withdata有值' : '$withdata无值'}><br/>
+            
+        </div>
+    </body>
+</html>

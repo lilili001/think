@@ -10,7 +10,6 @@ $products=array(
 );
 
 
-
 //使用each 和 list 将多维数组输出
 for(  $i=0;$i<count($products);$i++ ){
     echo $i;

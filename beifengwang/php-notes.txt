@@ -52,10 +52,16 @@
     PHP 还提供了一些特定类型的测试函数。每一个函数都使用一个变量座位其参数 ，
     并且返回 true或 false。
     is_array() 、 is_double() 、 is_float() 、 is_real() 、 is_long() 、 is_int() 、 is_integer() 、 is_string() 、
+
     is_object()、is_resource()、is_null()、is_numeric() 、is_callable() 判断是否是有效的函数名
 
     可以通过调用一个函数来实现转换变量数据类型的目的。
     intval()、floatval()、strval();setType(变量,类型) 
+
+    is_object()、is_resource()、is_null()、is_numeric()
+
+    可以通过调用一个函数来实现转换变量数据类型的目的。
+    intval()、floatval()、strval();
     
     超级全局变量：
     $GLOBALS 所有全局变量数组
@@ -148,7 +154,7 @@
 6.随机数 rand([min],[max]) mt_rand([min],[max])
 7.数组：可通过实例来查看相应用法
 	range()函数自动创建一个数组
-	 
+
     使用循环语句：因为相关数组的索引不是数字，因此无法使用 for 循环语句中使用一个
     简单的计数器对数组进行操作。但是可以使用 foreach循环或 list()和 each()结构。
     foreach ($ages as $key=>$value) {
@@ -209,13 +215,14 @@
     __FUNCTION__ 当前函数名
     __CLASS__ 当前类名
     __METHOD__ 当前方法名
-	
+
 9.字符串处理
     chop()函数移除字符串后面多余的空白，包括新行。
     ltrim()函数移除字符串起始处多余空白。
     rtrim()函数移除字符串后面多余的空白，包括新行，此函数是 chop()的别名。
     trim()函数移除字符串两边多余的空白。
     
+
 	htmlentities()和 htmlspecialchars 将html转为字符串。
 	如果想要去掉字符串中的 HTML 去掉，可以使用 strip_tags()函
 	
@@ -225,6 +232,7 @@
     strtoupper()函数将字符串转换为大写
     strtolower()函数将字符串转换成小写
     ucfirst()函数将第一个字母转换为大写
+
     ucwords()函数将每个单词第一个字母转换为大写
 	
 	explode(分隔符,字符串) 切割字符串，返回数组
@@ -252,3 +260,5 @@
 	include 'include.php';
 	include_once 'include.php';
 	require('require.php');
+    ucwords()函数将每个单词第一个字母转换为大写
+
