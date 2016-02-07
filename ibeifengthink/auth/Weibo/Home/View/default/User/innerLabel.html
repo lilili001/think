@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>内置标签</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  //常规引入方法
+    <script type="text/javascript" src="__PUBLIC__/js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/index.css" />-->
+    
+    <!--//使用 import 导入，js 和 css 是目录
+    <import type="js" file="js.index" />
+    <import type="css" file="css.index" />  -->
+
+    <!--//使用 import 导入，basepath 修改默认路径 Public 改为Common
+    <import type="js" file="js.index" basepath="./Common" />-->
+    
+    <!--load 加载标签可以智能的加载 js 和 css 文件
+    //使用 load 加载
+    <load href="__PUBLIC__/js/index.js" />
+    <load href="__PUBLIC__/css/index.css" />-->
+    
+    <!--系统还提供了专用 js 和 css 标签，专门用于加载
+    //使用专用标签
+    <js href="__PUBLIC__/js/index.js" />
+    <css href="__PUBLIC__/css/index.css" />-->
+    
+</head>
+<body> 
+    
+<!--<if condition='$user eq "蜡笔小新"'>
+    小新
+<elseif condition='$user eq "黑崎一护"'/>   
+    一护
+<else/>
+    错误
+</if>
+<br/>
+
+<if condition="mb_substr($user,0,3,'UTF-8') eq '蜡笔小'">condition 条件里可以使用 PHP 函数</if><br/>
+<if condition="$data['user'] eq '蜡笔小新'">condition 条件里使用 .或[] 语法，智能判断数组或对象</if><br/>
+<if condition="$obj:user eq '蜡笔小新'">condition 条件里使用冒号语法，直接使用对象</if><br/>
+<if condition="$Think.get.user eq '蜡笔小新'">condition 条件里使用系统变量,该方法查看方式是在url中加?user="蜡笔小新"</if> <br/><br/>
+
+switch的name 不需要$ <br/>
+<switch name="user">
+    <case value="蜡笔小新">小新</case>
+    <case value="黑崎一护">一护</case>
+    <default />错误
+</switch>
+
+ThinkPHP 提供了一组比较标签用于简单的变量比较，复杂的判断条件可以用 IF 标签
+替换。
+比较标签
+标签 含义
+eq 或 equal 等于
+neq 或 notequal 不等于
+gt 大于
+egt 大于等于
+lt 小于
+elt 小于等于
+heq 恒等于
+nheq 不恒等于
+
+比较标签<br/>
+//控制器变量$user=蜡笔小新，输出小新 注意  name="user" 就是控制器传过来的数据 不需要$<br/>
+<eq name="user" value="蜡笔小新">小新</eq><br/>
+eq也支持else
+
+//compare 统一方法<br/>
+<compare type="eq" name="user" value="蜡笔小新">小新</compare><br/> 
+
+
+ThinkPHP 提供了一组范围判断标签：in、notin、between、notbetween 四个标签，都用
+于判断变量是否在某个范围中。
+
+//如果 id 是 1，2，3 任意一个将输出
+<in name="id" value="1,2,3">id 在范围内</in>
+
+//in 标签，支持 else
+<in name="id" value="1,2,3">
+id在范围内
+<else/>
+id不在范围内
+</in>
+
+//notin 标签，正好相反
+<notin name="id" value="1,2,3">id 不在范围内</notin>
+//between标签，从哪里到哪里的范围
+<between name="id" value="1,10">id 在范围内</between>
+//notbetween标签，从哪里到哪里的范围
+<notbetween name="id" value="1,10">id 不在范围内</notbetween>
+//range标签，可以统一in、notin、between和notbetween
+<range name="id" value="1,2,3" type="in">id 在范围内</range>
+//name值可以是系统变量
+<in name="Think.get.id" value="1,2,3">id 在范围内</in>
+//value值可以是变量或系统变量
+<in name="id" value="$Think.get.range">id 在范围内</in>
+ThinkPHP 模版提供了一组用于判断变量的标签。
+//判断变量是否已赋值，赋值了就输出，空字符串也算赋值
+<present name="user">user 已经赋值</present>
+//判断变量是否已赋值，没有创建或赋值为null，都算没有值
+<notpresent name="user">user 还没有值</notpresent>
+//判断变量是否已赋值，组合
+<present name="user">
+user已赋值
+<else />
+user未赋值
+</present>
+ 
+<present name="Think.get.user">$_GET['user']已赋值</present>
+<empty name="user">user 为空值</empty>
+
+<notempty name="user">user不为空值</notempty>
+//判断变量是否为空，组合
+<empty name="user">
+user为空值
+<else />
+user不为空值
+</empty>
+
+<defined name="APP_PATH">APP_PATH 常量已定义</defined>
+//判断常量是否定义，没定义输出
+<notdefined name="APP_PATH">APP_PATH 常量未定义</notdefined>
+//判断常量是否定义，组合
+<defined name="APP_PATH">
+APP_PATH常量已定义
+<else />
+APP_PATH常量未定义
+</defined>
+
+//遍历volist  <br/>
+//volist的name接收的是控制器传递过来的数据,是个数组  id="arr" 的意思是把数据赋给arr
+//name 和 id 都是固定的 不能改为别的属性
+//offset 从第几条开始，起始值 0，length 共多少条 一般不在模板里做，在控制器或model中做
+
+<ul>   
+<volist name="data1" id="arr"  offset="5" length="10">
+    <li> <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+</volist>
+</ul>
+
+//通过 key 输出循环遍历的变量
+<ul>   
+<volist name="data1" id="arr" key="k">
+    <li><{$k}>. <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+</volist>
+</ul>
+
+//偶数时显示 mod 求当前余数，当前 index 除以 2 余 1(value)，输出偶数 【value可以是0 也可以是1】
+<ul>   
+<volist name="data1" id="arr" key="k" mod="2">
+    <eq name="mod" value="1">
+        <li><{$k}>. <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+    </eq>
+</volist>
+</ul>
+
+
+//没有指定 k，也可以用 i 变量输出
+<ul>
+<volist name="data1" id="arr" >
+    <li><{$i}>. <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+</volist>
+</ul>
+
+//key 变量，可以直接输出索引值，从 0 开始
+<ul>
+<volist name="data1" id="arr" >
+    <li><{$key}>. <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+</volist>
+</ul>
+
+//没有数据的情况下使用 empty 填充
+<ul>
+<volist name="data2" id="arr" empty="没有数据">
+    <li><{$key}>. <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+</volist>
+</ul>
+
+//empty 属性不支持 HTML 直接输入，但可以通过控制器变量输出
+<ul>
+<volist name="data2" id="arr" empty="$empty">
+    <li><{$key}>. <{$arr.id}>--<{$arr.user}>--<{$arr.email}> </li>
+</volist>
+</ul>
+
+
+//foreach 没有额外的属性标签 相对volist更为简单
+//只支持 key 属性，但{$key}变量支持
+<ul>
+    <foreach name="data1" item="arr">
+        <li><{$key+1}>.<{$arr.id}>--<{$arr.user}>--<{$arr.email}></li>
+    </foreach>
+</ul>
+
+
+For标签就是简单的循环标签。 做数字循环
+//从 1 到 99 循环
+<for start="1" end="100" step="2">
+    <{$i}><br/>
+</for>
+
+<for start="1" end="100" step="2" name="k">
+    <{$k}><br/>
+</for>
+
+//模板中定义变量
+<assign name="var" value="123" />
+<{$var}> 
+
+
+//在模版中定义常量， value 值可以为变量 （$user） 或系统变量 （$Think.get.user）
+<define name="MY_NAME" value="Lee" />
+<{$Think.const.MY_NAME}>
+
+PHP 代码可以和标签在模版文件中混合使用， 可以在模版文件里面书写任意的 PHP 语句
+代码。
+//使用 php 标签
+<php>
+$a = 1;
+$b = 2;
+echo $a + $b;
+</php> 
+
+//使用 php 语法
+<?php
+$a = 1;
+$b = 2;
+echo $a + $b;
+?>
+如果想原样输出标签极其内容，可以使用 literal 标签
+//原样输出
+<literal>
+<php>echo 123;</php>
+</literal>
+-->
+
+</body>
+</html>

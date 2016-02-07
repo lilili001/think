@@ -1,0 +1,1 @@
+<?php if (!defined('THINK_PATH')) exit();?>后台 Index控制器 index方法 ---后台首页
