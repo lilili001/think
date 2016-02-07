@@ -807,6 +807,947 @@ thinkphp的控制器是php的一个类，需要继承自thinkphp的核心类cont
 空操作-当系统找不到请求的操作方法的时候，系统会尝试定位到空的方法 _empty()
 控制器调用的四种方法 url自动定位 new 实例化 A函数 R函数
 
+#第8章 字符串处理
+	一． 字符串格式化
+		<?php  echo trim(' PHP '); ?>
+
+#第11章 表单与验证
+     Header()函数
+     
+	 1.用于重新导向指定的 URL
+		<?php header('Location:http://www.baidu.com');?>
+		2.用于设置页面字符编码
+		<?php 
+			header('Content-Type: text/html; charset=gbk');
+			echo '嘿嘿，我是中文！页面编码是GBK，文件也是GBK';
+		?>
+  	  详见11-form demo
+
+#第14章 图像处理
+		创建图像的一般流程：
+		1).设定标头，告诉浏览器你要生成的 MIME类型。
+		2).创建一个图像区域，以后的操作都将基于此图像区域。
+		3).在空白图像区域绘制填充背景。
+		4).在背景上绘制图形轮廓输入文本。
+		5).输出最终图形。
+		6).清除所有资源。
+		7).其他页面调用图像。
+		设定标头指定 MIME输出类型
+		<?php
+		header('Content-Type: image/png');
+		?>
+		创建一个空白的图像区域
+		<?php
+		$im = imagecreatetruecolor(200,200);
+		?>
+		在空白图像区域绘制填充背景
+		<?php
+		$blue = imagecolorallocate($im,0,102,255);
+		imagefill($im,0,0,$blue);
+		?>
+	   	
+	   	在背景上绘制图形轮廓输入文本
+		<?php
+		$white = imagecolorallocate($im,255,255,255);
+		imageline($im,0,0,200,200,$white);
+		imageline($im,200,0,0,200,$white);
+		imagestring($im, 5, 80, 20, "Mr.Lee", $white);
+		?>
+		
+		输出最终图形
+		<?php
+		imagepng($im);
+		?>
+		清除所有资源
+		<?php
+		imagedestroy($im);
+		?>
+		其他页面调用创建的图形
+		<img src= "Demo4.php" alt= "PHP 创建的图片" />
+	   	
+		    简单验证码
+		<?php
+		header('Content-type: image/png');
+		for($Tmpa=0;$Tmpa<4;$Tmpa++){
+		$nmsg.=dechex(rand(0,15));
+		}
+		$im = imagecreatetruecolor(75,25);
+		$blue = imagecolorallocate($im,0,102,255);
+		$white = imagecolorallocate($im,255,255,255);
+		imagefill($im,0,0,$blue);
+		imagestring($im,5,20,4,$nmsg,$white);
+		imagepng($im);
+		imagedestroy($im);
+		?> 	
+   	    加载已有的图像
+		<?php
+		header('Content-Type:image/png');
+		define('__DIR__',dirname(__FILE__).'\\');
+		$im = imagecreatefrompng(__DIR__.'222.png');
+		$white = imagecolorallocate($im,255,255,255);
+   	imagestring($im,3,5,5,'http://www.yc60.com',$white);
+	imagepng($im);
+	imagedestroy($im);
+	?>
+	加载已有的系统字体
+	<?php
+	$text = iconv("gbk","utf-8","李炎恢");
+	$font = 'C:\WINDOWS\Fonts\SIMHEI.TTF';
+	imagettftext($im,20,0,30,30,$white,$font,$text);
+	?>
+   	
+   
+#第15章.mysql 数据库
+  ##15-1
+	mysql 操作：
+	1)打开mysql终端
+	2)输入root的设置密码
+	
+	在终端写命令的时候，关键字 小写，其他命令都大写
+	
+	终端进入数据库：mysql -h localhost -u root 
+	        如果有密码： mysql -h localhost -u root -p password
+	   
+	  -1:显示数据库版本号以及日期：
+	     mysql>SELECT VERSION(),CURRENT_DATE(); 
+	              这里的,是两个一起输出的意思，
+	              注意要用分号 ; 结尾    
+	         输出结果如下 两行两列  字段名就是函数名  
+	        +-----------+----------------+
+			| VERSION() | CURRENT_DATE() |
+			+-----------+----------------+
+			| 5.6.11    | 2015-07-04     |
+			+-----------+----------------+	
+	   -2:可以用别名version 替换函数名 作为字段 结果如下
+		mysql>SELECT VERSION() AS version, CURRENT_DATE() AS date;
+			+---------+------------+
+			| version | date       |
+			+---------+------------+
+			| 5.6.11  | 2015-07-04 |
+			+---------+------------+
+	   -3：可以执行计算的结果：mysql>(20+5)*4; 也可以像上面一样用别名 mysql>(20+5)*4 AS result;
+		    +----------+ 
+			| (20+5)*4 |  
+			+----------+ 
+			| 100      |  
+			+----------+ 
+		-4: 通过多行实现数据库的使用者和日期,分号 ; 代表结束
+
+			mysql> SELECT
+			    -> USER()
+			    -> ,
+			    -> NOW()
+			    -> ;
+			+----------------+---------------------+
+			| USER()         | NOW()               |
+			+----------------+---------------------+
+			| root@localhost | 2015-07-04 13:45:17 |
+			+----------------+---------------------+
+		-5:通过一行显示数据库使用者和日期  分号就分别打印出了两个表格，而上面的逗号是一个表格
+		mysql> SELECT USER();SELECT NOW();
+			+----------------+
+			| USER()         |
+			+----------------+
+			| root@localhost |
+			+----------------+
+			1 row in set (0.00 sec)
+			
+			+---------------------+
+			| NOW()               |
+			+---------------------+
+			| 2015-07-04 13:50:38 |
+			+---------------------+
+			1 row in set (0.00 sec)
+		-6：命令的取消  当命令输错的时候 可以取消 \c
+		   mysql> SELEET
+			   -> \c
+		   mysql>
+		-7:命令的退出: exit; 或者quit;
+		   mysql> SELEET
+			   -> \c
+		   mysql> exit;
+		   Bye
+		   C:\Users\Administrator>
+	##15-2  mysql常用数据类型
+	            整数型：TINYINT，SMALLINT，INT，BIGINT
+		浮点型：FLOAT，DOUBLE，DECIMAL(M,D)
+		字符型：CHAR，VARCHAR
+		日期型：DATETIME，DATE，TIMESTAMP
+		备注型：TINYTEXT，TEXT，LONGTEXT
+		
+	         整数型:这是表格  这个不是命令行		
+	   +------------+---------+------------------------+---------------------------+
+	   |类型			|	 字节	  |	最小值			       |    	  最大值			   |	
+	   |  		    |		  |(带符号的/无符号的)          |     (带符号的/无符号的)         |
+	   +------------+---------+------------------------+---------------------------+									
+	   |TINYINT		| 	 1	  | -128				   |		 127			   |	
+	   |			|		  | 0					   |		 255c			   |
+	   +------------+---------+------------------------+---------------------------+															
+	   |SMALLINT	|	 2	  |	-32768				   |	 32767 				   |
+	   |			|		  |	0					   |	 65535				   |
+	   +------------+---------+------------------------+---------------------------+	
+	   |MEDIUMINT	|	 3	  |	-8388608			   |	 8388607			   |	
+	   |			|		  |	0					   |	 16777215			   |
+	   +------------+---------+------------------------+---------------------------+
+	   |INT			|	 4 	  |	-2147483648			   |	 2147483647			   |	
+	   |			|		  |	0					   |	 4294967295			   |
+	   +------------+---------+------------------------+---------------------------+
+	   |BIGINT	    |	 8 	  |	-9223372036854775808   |      9223372036854775807  |
+	   |		    |		  |	0 				       |	 18446744073709551615  |
+	   +------------+---------+------------------------+---------------------------+
+	   
+	         浮点型:这是表格  这个不是命令行		
+	   +------------+---------+--------------------------+---------------------------+															
+	   |类型			|	字节	  |	最小值				     | 	最大值 				     |
+	   +------------+---------+--------------------------+---------------------------+	
+	   |FLOAT		|	 4	  |	+-1.175494351E-38	     |  +-3.402823466E+38		 |	
+	   +------------+---------+--------------------------+---------------------------+
+	   |DOUBLE		|	 8 	  | +-2.2250738585072014E-308|	+-1.7976931348623157E+308|			   |	 
+	   +------------+---------+--------------------------+---------------------------+
+	   |DECIMAL	    |	可变 	  |	它的取值范围可变。   			 |   					     |
+	   +------------+---------+--------------------------+---------------------------+	
+	   	
+		
+										
+	            日期型
+ 
+		DATETIME '0000-00-00 00:00:00'
+		DATE '0000-00-00'
+		TIMESTAMP 00000000000000
+		TIME '00:00:00'
+		YEAR 0000
+		
+		日期型：
+	   +------------+------------------------------------+ 															
+	   |列类型		|	   	值	   		 				 |
+	   +------------+------------------------------------+ 	
+	   |DATETIME	|	 '0000-00-00 00:00:00'	   	     |		  	
+	   +------------+------------------------------------+ 
+	   |DATE		|	 '0000-00-00'	   		  		 |	 
+	   +------------+------------------------------------+ 
+	   |TIMESTAM    |	  00000000000000 	   			 |		     
+	   +------------+------------------------------------+ 
+	   |TIME        |	 '00:00:00 	  					 |
+	   +------------+------------------------------------+ 
+	   |YEAR        |	  0000	   					     |
+	   +------------+------------------------------------+ 	
+		'ab  ' char 4个字节，空格也算 varchar3个字节 去掉空格 并多加一个
+		 
+		值                           CHAR(4)     存储需求          VARCHAR(4)   存储需求
+		''         ' '         4个字节                   ''         1个字节
+	   	'ab'       'ab '       4个字节                  'ab '      3个字节 
+	   	'abcd'     'abcd'      4个字节              'abcd'       5个字节
+		'abcdefgh' 'abcd'	   4个字节 	 'abcd'	      5个字节
+	   	
+	   	备注型：
+	   	TINYTEXT	   字符串，最大长度255个字符
+		TEXT		   字符串，最大长度65535个字符  
+		MEDIUMTEXT   字符串，最大长度16777215个字符
+		LONGTEXT 	   字符串，最大长度4294967295个字符  用于备注大文章 帖子 新闻 
+	   	varchar 	   用户名 文章标题
+	   	char		   密码 性别之类
+	   	
+	   	用途：	
+ 	    char:定长 访问速度块
+ 	    varchar:好处 容量小
+ 	    
+	##MySQL 数据库操作
+		1)显示当前存在的数据库
+			>SHOW DATABASES;
+		2)选择你所需要的数据库
+			>USE guest;
+		3)查看当前所选择的数据库
+			>SELECT DATABASE();
+		4)查看一张表的所有内容
+			>SELECT * FROM 某张表名; //可以先通过 SHOW TABLES;来查看有多少张表
+			mysql> SELECT * FROM g_friend;
+			+------+----------+------------+----------+---------------------+
+			| G_ID | G_ToUser | G_FromUser | G_Degree | G_Date              |
+			+------+----------+------------+----------+---------------------+
+			|    1 | 大娘水饺 | 炎日       |        0 | 2009-04-21 14:56:03 |
+			|    2 | 小燕子   | 炎日       |        0 | 2009-05-03 10:51:11 |
+			|    5 | 炎日     | 樱桃小丸子 |        1 | 2009-05-03 10:56:31 |
+			+------+----------+------------+----------+---------------------+
+		5)根据数据库设置中文编码
+			>SET NAMES gbk; //set names utf8;  gbk中文编码
+		6)创建一个数据库
+			>CREATE DATABASE book;
+		7)在数据库里创建一张表
+			>CREATE TABLE users (
+			>usernameVARCHAR(20), //NOT NULL 设置不允许为空  如果这一字段数据为空则报错
+			>sex CHAR(1),
+			>birth DATETIME) DEFAULT CHARSET = utf8;
+		8)显示表的结构
+			>DESCIRBE users;
+			mysql> DESCRIBE users;
+			+----------+-------------+------+-----+---------+-------+
+			| Field    | Type        | Null | Key | Default | Extra |
+			+----------+-------------+------+-----+---------+-------+
+			| username | varchar(20) | YES  |     | NULL    |       |
+			| sex      | char(1)     | YES  |     | NULL    |       |
+			| birth    | datetime    | YES  |     | NULL    |       |
+			+----------+-------------+------+-----+---------+-------+
+		9)给表插入一条数据
+			mysql> INSERT INTO users (username,six,birth) VALUES ('polyna','1',NOW());
+			
+			插入数据之后再查看表：
+			mysql> SELECT * FROM users;
+			+----------+------+---------------------+
+			| username | sex  | birth               |
+			+----------+------+---------------------+
+			| polyna   | 1    | 2015-07-04 20:31:24 |
+			+----------+------+---------------------+
+			
+			这里又重新建了一张表 friends;
+			插入中文数据：切记在建表的时候要设置字符集 DEFAULT CHARSET = utf8; 不然会乱码
+			mysql> SET NAMES GBK;
+
+			mysql> INSERT INTO friends (username,sex,birth) VALUES ('章含','男',NOW());
+			mysql> INSERT INTO friends (username,sex,birth) VALUES ('小美女','女',NOW());
+			mysql> INSERT INTO friends (username,sex,birth) VALUES ('alice','1',NOW());
+			mysql> INSERT INTO friends (username,sex,birth) VALUES ('joe','0',NOW());
+			
+			mysql> SELECT * FROM friends;
+			+----------+------+---------------------+
+			| username | sex  | birth               |
+			+----------+------+---------------------+
+			| 章含     | 男   | 2015-07-04 21:05:54 |
+			| 小美女   | 女   | 2015-07-04 21:09:25 |
+			| alice    | 1    | 2015-07-04 21:12:58 |
+			| joe      | 0    | 2015-07-04 21:13:20 |
+			+----------+------+---------------------+
+			
+			
+		10)筛选指定的数据 
+		            显示用户名为joe的字段
+			mysql> SELECT * FROM friends  WHERE username = 'joe';
+			+----------+------+---------------------+
+			| username | sex  | birth               |
+			+----------+------+---------------------+
+			| joe      | 0    | 2015-07-04 21:13:20 |
+			+----------+------+---------------------+
+			或者：只显示 username 和 sex的字段
+			mysql> SELECT username,sex FROM friends;
+			+----------+------+
+			| username | sex  |
+			+----------+------+
+			| 章含     | 男   |
+			| 小美女   | 女   |
+			| alice    | 1    |
+			| joe      | 0    |
+			+----------+------+
+			
+		11)修改指定的数据
+			>UPDATE usersSET sex = '男' WHERE username='Lee';
+			
+			
+		12)删除指定的数据
+			mysql> DELETE FROM friends  WHERE username = 'joe';
+ 
+			mysql> SELECT * FROM friends;
+			+----------+------+---------------------+
+			| username | sex  | birth               |
+			+----------+------+---------------------+
+			| 章含 	   | 男  	  | 2015-07-04 21:05:54 |
+			| 小美女 	   | 女  	  | 2015-07-04 21:09:25 |
+			| alice    | 1    | 2015-07-04 21:12:58 |
+			+----------+------+---------------------+
+			
+		13)按指定的数据排序
+			> SELECT * FROM usersORDER BY birth DESC; //倒序 一般用倒序比较多
+			
+			mysql> SELECT * FROM friends ORDER BY birth DESC;
+			+----------+------+---------------------+
+			| username | sex  | birth               |
+			+----------+------+---------------------+
+			| alice    | 1    | 2015-07-04 21:12:58 |
+			| 小美女	   | 女 	  | 2015-07-04 21:09:25 |
+			| 章含   	   | 男 	  | 2015-07-04 21:05:54 |
+			+----------+------+---------------------+
+			
+			默认是按照 正序 ASC 显示
+			
+		14)删除指定的表
+			>DROP TABLE users;
+			
+			mysql> DROP TABLE users;
+			mysql> SHOW TABLES;
+			+----------------+
+			| Tables_in_book |
+			+----------------+
+			| friends        |
+			+----------------+
+			
+		15)删除指定的数据库
+			>DROP DATABASE book;	
+			
+		16)数据更新
+		mysql> SELECT * FROM g_friend; 查看 g_friend这张表
+		+------+----------+------------+----------+---------------------+
+		| G_ID | G_ToUser | G_FromUser | G_Degree | G_Date              |
+		+------+----------+------------+----------+---------------------+
+		|    1 | 大娘水饺 | 炎日       |        0 | 2009-04-21 14:56:03 |
+		|    2 | 小燕子   | 炎日       |        0 | 2009-05-03 10:51:11 |
+		|    5 | 炎日     | 樱桃小丸子 |        1 | 2009-05-03 10:56:31 |
+		+------+----------+------------+----------+---------------------+
+		 
+		g_friend这张表中将大娘水饺  改为  大娘大饺
+		mysql> UPDATE g_friend SET g_touser = '大娘大饺'  WHERE g_id=1;
+		然后查看：
+		mysql> SELECT * FROM g_friend;
+		+------+----------+------------+----------+---------------------+
+		| G_ID | G_ToUser | G_FromUser | G_Degree | G_Date              |
+		+------+----------+------------+----------+---------------------+
+		|    1 | 大娘大饺 | 炎日       |        0 | 2009-04-21 14:56:03 |
+		|    2 | 小燕子   | 炎日       |        0 | 2009-05-03 10:51:11 |
+		|    5 | 炎日     | 樱桃小丸子 |        1 | 2009-05-03 10:56:31 |
+		+------+----------+------------+----------+---------------------+
+   ##15-3
+     mysql的常用函数：
+     	CONCAT()	 CONCAT(x,y,...)	 创建形如 xy 的新字符串
+		LENGTH()	 LENGTH(column)		 返回列中储存的值的长度
+		LEFT()		 LEFT(column,x)		 从列的值中返回最左边的 x 个字符
+		RIGHT()		 RIGHT(column,x)	 从列的值中返回最右边的 x 个字符
+		TRIM() 		 TRIM(column) 		从存储的值删除开头和结尾的空格
+		UPPER()		 UPPER(column)		 把存储的字符串全部大写
+		LOWER()		 LOWER(column)		 把存储的字符串全部小写
+		SUBSTRING()  SUBSTRING(column, start,length) 从 column中返回开始 start的 length个字符（索引从 0 开始）
+		MD5()		 MD5(column) 把储存的字符串用 MD5 加密
+		SHA()		 SHA(column) 把存储的字符串用 SHA 加密
+		
+		CONCAT()： 创建形如 xy 的新字符串
+		mysql> SELECT CONCAT('Mr.','Li');
+		+--------------------+
+		| CONCAT('Mr.','Li') |
+		+--------------------+
+		| Mr.Li              |
+		+--------------------+
+		
+		LENGTH()：返回列中储存的值的长度
+		mysql> SELECT LENGTH('Lee');
+		+---------------+
+		| LENGTH('Lee') |
+		+---------------+
+		|             3 |
+		+---------------+
+		
+		LEFT()：从列的值中返回最左边的 x 个字符
+		mysql> SELECT LEFT('Lee',2);
+		+---------------+
+		| LEFT('Lee',2) |
+		+---------------+
+		| Le            |
+		+---------------+
+		
+		SUBSTRING()  SUBSTRING(column, start,length) 从 column中返回开始 start的 length个字符（索引从 0 开始）
+		mysql> SELECT SUBSTRING('teacher alice',2,3);
+		+--------------------------------+
+		| SUBSTRING('teacher alice',2,3) |
+		+--------------------------------+
+		| eac                            |
+		+--------------------------------+
+		
+		MD5()		 MD5(column) 把储存的字符串用 MD5 加密
+		mysql> SELECT MD5('123456');
+		+----------------------------------+
+		| MD5('123456')                    |
+		+----------------------------------+
+		| e10adc3949ba59abbe56e057f20f883e |
+		+----------------------------------+
+		
+		数字函数:用法同上
+		函数			 用法			 描述
+		ABS() 		ABS(x) 		 返回 x 的绝对值
+		CEILING() 	CEILING(x)	 返回 x 的值的最大整数
+		FLOOR() 	FLOOR(x) 	 返回 x 的整数
+		ROUND() 	ROUND(x)	 返回 x 的四舍五入整数
+		MOD() 		MOD(x)		 返回 x 的余数
+		RNAD() 		RNAD()		 返回 0-1.0之间随机数
+		FORMAT() 	FORMAT(x,y) 返回一个格式化后的小数
+		SIGN() 		SIGN(x)		 返回一个值，正数(+1) ， 0 ，负数 (-1)
+		SQRT()		SQRT(x) 	 返回 x 的平方根
+     
+        RNAD() 		RNAD()		 返回 0-1.0之间随机数
+        mysql> SELECT RAND()+10 AS '随机数+10' ;
+		+--------------------+
+		| 随机数+10          |
+		+--------------------+
+		| 10.994393341238045 |
+		+--------------------+
+		
+		日期函数：
+		函数				 用法						 描述
+		HOUR()			HOUR(column)			 只返回储存日期的小时值
+		MINUTE()		MINUTE(column)  		只返回储存日期的分钟值
+		SECOND() 		SECOND(column)			 只返回储存日期的秒值
+		DAYNAME() 		DAYNAME(column) 		返回日期值中天的名称
+		DAYOFMONTH() 	DAYOFMONTH(column) 		返回日期值中当月第几天
+		MONTHNAME() 	MONTHNAME(column) 		返回日期值中月份的名称
+		MONTH() 		MONTH(column) 			返回日期值中月份的数字值
+		YEAR() 			YEAR(column) 			返回日期值中年份的数字值
+		CURDATE() 		CURDATE() 				返回当前日期
+		CURTIME() 		CURTIME() 				返回当前时间
+		NOW() 			NOW() 					返回当前时间和日期
+		
+		mysql> SELECT NOW();
+		+---------------------+
+		| NOW()               |
+		+---------------------+
+		| 2015-07-04 21:51:06 |
+		+---------------------+
+     
+        mysql> SELECT HOUR(NOW());
+		+-------------+
+		| HOUR(NOW()) |
+		+-------------+
+		|          21 |
+		+-------------+
+		
+		当前日期没加参数now()
+		mysql> SELECT CURDATE();
+		+------------+
+		| CURDATE()  |
+		+------------+
+		| 2015-07-04 |
+		+------------+
+		
+		格式化日期和时间 (DATE_FORMAT()和 和  TIME_FORMAT())  两个参数  参数一:时间  参数二：格式 
+		名词 用法 示例
+		%e	 一月中的某天		 1~31
+		%d	 一月中的某天，两位 	 01~31
+		%D	 带后缀的天			 1st~31st
+		%W	 周日名称 			 Sunday~Saturday
+		%a	 简写的周日名称		 Sun-Sat
+		%c	 月份编号			 1~12
+		%m	 月份编号，两位		 01~12
+		%M	 月份名称 			 January~December
+		%b	 简写的月份名称		 Jan~Dec
+		%Y	 年份 				 2002
+		%y	 年份，两位			 02
+		%l	 小时				 1~12
+		%h	 小时,两位			 01~12
+		%k	 小时，24 小时制		 0~23
+		%H	 小时，24 小制度，两位	 00~23
+		%i	 分钟				 00~59
+		%S	 秒 				 00~59
+		%r	 时间				 8:17:02 PM
+		%T	 时间，24 小时制 		 20:17:02 PM
+		%p	 上午或下午 			 AM 或 PM		
+		
+		格式化日期；
+		mysql> SELECT DATE_FORMAT(NOW(),'%Y');
+		+-------------------------+
+		| DATE_FORMAT(NOW(),'%Y') |
+		+-------------------------+
+		| 2015                    |
+		+-------------------------+
+		
+		mysql> SELECT DATE_FORMAT(NOW(),'%H,%i,%S,%p');
+		+----------------------------------+
+		| DATE_FORMAT(NOW(),'%H,%i,%S,%p') |
+		+----------------------------------+
+		| 22,00,39,PM                      |
+		+----------------------------------+
+     
+    ##15-4 sql语句
+      1.创建一个班级数据库 school，里面包含一张班级表 grade，包含编号(id)、姓名(name) 、
+		邮件(email)、评分(point)、注册日期(regdate)。 
+		
+		id:每个编号不得重复 而且可以排序 采用整型 范围是 0-99 班级不会超过100个学生 TINYINT 
+		unsigned 无符号
+		auto_increament 表示 1.2.3.4.5自动累计  自动编号
+		
+		mysql>CREATE DATABASE school; //创建一个数据库
+		mysql> CREATETABLE grade(
+		//UNSIGNED 表示无符号， TINYINT(2) 无符号整数 0-99 ， NOT NULL 表示不能为
+		空，AUTO_INCREMENT 表示从 1 开始没增加一个字段，累计一位
+		-> id TINYINT(2) UNSIGNED NOT NULL AUTO_INCREMENT,
+		-> nameVARCHAR(20) NOT NULL,
+		-> email VARCHAR(40),
+		-> point TINYINT(3) UNSIGNED NOT NULL,
+		-> regdate DATETIME NOT NULL,
+		-> PRIMARY KEY (id) //表示 id 为主键，让 id 值唯一，不得重复,方便搜索与使用。
+		-> ) DEFAULT CHARSET = utf8;
+		
+		查看表结构：
+		mysql> DESC grade;
+		+---------+---------------------+------+-----+---------+----------------+
+		| Field   | Type                | Null | Key | Default | Extra          |
+		+---------+---------------------+------+-----+---------+----------------+
+		| id      | tinyint(2) unsigned | NO   | PRI | NULL    | auto_increment |
+		| name    | varchar(20)         | NO   |     | NULL    |                |
+		| email   | varchar(40)         | YES  |     | NULL    |                |
+		| point   | tinyint(3) unsigned | NO   |     | NULL    |                |
+		| regdate | datetime            | NO   |     | NULL    |                |
+		+---------+---------------------+------+-----+---------+----------------+
+		
+		插入数据：
+		id可以不用插 自动编号：
+		mysql> INSERT INTO grade (name,email,point,regdate) VALUES (Lee'','yc60.com@gmail.com',88,NOW());
+	            
+	            依次插入6条数据：有一条email为null
+		mysql> INSERT INTO grade (name,email,point,regdate) VALUES ('jack','NULL',72,NOW());
+		
+		mysql> SELECT * FROM grade;
+		+----+------------+--------------------+-------+---------------------+
+		| id | name       | email              | point | regdate             |
+		+----+------------+--------------------+-------+---------------------+
+		|  1 | Lee        | yc60.com@gmail.com |    88 | 2015-07-05 12:02:22 |
+		|  2 | alice      | bbsm@gmail.com     |    92 | 2015-07-05 12:04:11 |
+		|  3 | jeams      | sina@gmail.com     |    79 | 2015-07-05 12:04:33 |
+		|  4 | hanmeimei  | 263a@gmail.com     |    89 | 2015-07-05 12:04:51 |
+		|  5 | uncle wang | wang@hotmail.com   |    98 | 2015-07-05 12:05:21 |
+		|  6 | jack       | NULL               |    72 | 2015-07-05 12:08:16 |
+		+----+------------+--------------------+-------+---------------------+
+		
+	##15-5	 WHERE表达式的常用运算符
+	   +-------------+-------------------+
+	   |MYSQL运算符	 |		含义			 |
+	   +-------------+-------------------+	
+	   |=			 |		等于			 |
+	   |< 			 |		小于			 |
+	   |> 			 |		大于	  		 |
+	   |<= 			 |		小于或等于		 |
+	   |>= 			 |		大于或等于		 |
+	   |!= 			 |		不等于  		 |
+	   |IS NOT NULL  |		具有一个值		 |
+	   |IS NULL 	 |		没有值  		 |
+	   |BETWEEN 	 |		在范围内 		 |
+	   |NOT BETWEEN  |		不在范围内		 |
+	   |IN 			 |		指定的范围		 |
+	   |OR 			 |		两个条件语句之一为真|
+	   |AND 		 |		两个条件语句都为真  |
+	   |NOT 		 |		条件语句不为真          |
+	   +-------------+-------------------+	
+	   
+	   4.姓名等于'Lee'的学员，成绩大于 90 分的学员，邮件不为空的成员，70-90 之间的成员
+		mysql> SELECT * FROM grade  WHERE name='Lee';
+		
+		mysql> SELECT * FROM  grade  WHERE name ='Lee' or name ='jack';
+		+----+------+--------------------+-------+---------------------+
+		| id | name | email              | point | regdate             |
+		+----+------+--------------------+-------+---------------------+
+		|  1 | Lee  | yc60.com@gmail.com |    88 | 2015-07-05 12:02:22 |
+		|  6 | jack | NULL               |    72 | 2015-07-05 12:08:16 |
+		+----+------+--------------------+-------+---------------------+
+		
+		mysql> SELECT * FROM grade  WHERE point >90;
+		+----+------------+------------------+-------+---------------------+
+		| id | name       | email            | point | regdate             |
+		+----+------------+------------------+-------+---------------------+
+		|  2 | alice      | bbsm@gmail.com   |    92 | 2015-07-05 12:04:11 |
+		|  5 | uncle wang | wang@hotmail.com |    98 | 2015-07-05 12:05:21 |
+		+----+------------+------------------+-------+---------------------+
+		
+		mysql> SELECT * FROM grade  WHERE email IS NOT NULL;
+		mysql> SELECT * FROM grade  WHERE point BETWEEN 70AND 90;
+		+----+-----------+--------------------+-------+---------------------+
+		| id | name      | email              | point | regdate             |
+		+----+-----------+--------------------+-------+---------------------+
+		|  1 | Lee       | yc60.com@gmail.com |    88 | 2015-07-05 12:02:22 |
+		|  3 | jeams     | sina@gmail.com     |    79 | 2015-07-05 12:04:33 |
+		|  4 | hanmeimei | 263a@gmail.com     |    89 | 2015-07-05 12:04:51 |
+		|  6 | jack      | NULL               |    72 | 2015-07-05 12:08:16 |
+		+----+-----------+--------------------+-------+---------------------+
+		mysql> SELECT * FROM grade WHERE point IN (95,82,78)
+	
+		5.查找邮件使用 163 的学员，不包含 yc60.com 字符串的学员  like模糊查找 结尾必须是--163.com 
+		%代表任意匹配   	%163.com    163.com为结尾
+					163.com%    163.com为开头
+		mysql> SELECT * FROM grade  WHERE email LIKE '%163.com';
+		mysql> SELECT * FROM grade  WHERE email NOT LIKE '%yc60.com%';
+		
+		6.按照学员注册日期的倒序排序，按照分数的正序排序
+		mysql> SELECT * FROM grade ORDER BY regdateDESC;
+		mysql> SELECT * FROM grade ORDER BY point ASC;
+		
+		7.只显示前三条学员的数据，从第 3 条数据开始显示 2 条
+		mysql> SELECT * FROM grade LIMIT 3;
+ 
+		mysql> SELECT * FROM grade LIMIT 3,2;
+		+----+------------+------------------+-------+---------------------+
+		| id | name       | email            | point | regdate             |
+		+----+------------+------------------+-------+---------------------+
+		|  4 | hanmeimei  | 263a@gmail.com   |    89 | 2015-07-05 12:04:51 |
+		|  5 | uncle wang | wang@hotmail.com |    98 | 2015-07-05 12:05:21 |
+		+----+------------+------------------+-------+---------------------+
+		
+		8.修改姓名为'Lee'的电子邮件
+		mysql> UPDATE gradeSETemail='yc60.com@163.com'  WHERE name='Lee';
+		
+		修改姓名为'Lee'的电子邮件:
+	    mysql> UPDATE grade SET email='alice3344@126.com'  WHERE name = 'hanmeimei';
+	    
+		从第 3 条数据开始显示 2 条:
+		mysql> SELECT * FROM grade LIMIT 3,2;
+		+----+------------+-------------------+-------+---------------------+
+		| id | name       | email             | point | regdate             |
+		+----+------------+-------------------+-------+---------------------+
+		|  4 | hanmeimei  | alice3344@126.com |    89 | 2015-07-05 12:04:51 |
+		|  5 | uncle wang | wang@hotmail.com  |    98 | 2015-07-05 12:05:21 |
+		+----+------------+-------------------+-------+---------------------+
+		
+	    9.删除编号为 4 的学员数据
+		mysql> DELETE FROM grade WHERE id=4;
+	    
+	 ##mysql分组函数
+		 函数			    用法			 描述
+		AVG() 	  AVG(column) 		返回列的平均值
+		COUNT()   COUNT(column)		 统计行数
+		MAX() 	  MAX(column) 		求列中的最大值
+		MIN() 	  MIN(column) 		求列中的最小值
+		SUM() 	  SUM(column) 		求列中的和	
+		
+		AVG() 	  AVG(column) 		返回列的平均值
+		mysql> SELECT AVG(point) FROM grade;
+		+------------+
+		| AVG(point) |
+		+------------+
+		|    86.3333 |
+		+------------+	
+		或者：
+		mysql> SELECT AVG(point) AS '平均值'  FROM grade;
+		+---------+
+		| 平均值  |
+		+---------+
+		| 86.3333 |
+		+---------+
+		
+		mysql> SELECT COUNT(*) AS '行数' FROM  grade;
+		+------+
+		| 行数 |
+		+------+
+		|    6 |
+		+------+
+		
+		mysql> SELECT COUNT(email) AS email_count FROM  grade;
+		+-------------+
+		| email_count |
+		+-------------+
+		|           6 |
+		+-------------+
+		
+		求point列的最大数
+		mysql> SELECT MAX(point) AS '最大数' FROM grade;
+		+--------+
+		| 最大数 |
+		+--------+
+		|     98 |
+		+--------+
+		
+	.1添加表字段
+
+		alter table table1 add transactor varchar(10) not Null;
+		
+		alter table   table1 add id int unsigned not Null auto_increment primary key
+		
+		4.2.修改某个表的字段类型及指定为空或非空
+		>alter table 表名称 change 字段名称 字段名称 字段类型 [是否允许非空];
+		>alter table 表名称 modify 字段名称 字段类型 [是否允许非空];
+		
+		>alter table 表名称 modify 字段名称 字段类型 [是否允许非空];
+		
+		4.3.修改某个表的字段名称及指定为空或非空
+		>alter table 表名称 change 字段原名称 字段新名称 字段类型 [是否允许非空
+		
+		4.4如果要删除某一字段，可用命令：ALTER TABLE mytable DROP 字段 名;
+			
+#第16章 php操作 mysql	
+	
+	一：php连接mysql
+	       这里，我们全面采用 UTF-8 编码	
+		<?php
+			  header('Content-Type:text/html;charset=utf-8');
+			  
+			  //常量参数
+		      define('DB_HOST','localhost');
+			  define('DB_USER','root');
+			  define('DB_NAME','school1');
+			  
+			  //第一步，连接数据库  // $conn 返回资源
+			  $conn= @mysql_connect(DB_HOST,DB_USER) or die('数据库连接错误'.mysql_error());
+			  
+			  //第二步，选择指定的数据库
+			  mysql_select_db(DB_NAME,$conn) or die('指定的数据库不存在，数据库错误'.mysql_error());
+			  
+			  echo $conn;  
+		?>
+		--------------------------------------------------------------------------
+		<?php
+			  header('Content-Type:text/html;charset=utf-8');
+			  
+			  //常量参数
+		      define('DB_HOST','localhost');
+			  define('DB_USER','root');
+			  define('DB_NAME','school');
+			  
+			  //第一步，连接数据库
+			  $conn= @mysql_connect(DB_HOST,DB_USER) or die('数据库连接错误'.mysql_error());
+			  //echo $conn;//返回资源
+			  
+			  //第二步，选择指定的数据库 设置字符集
+			  @mysql_select_db(DB_NAME,$conn) or die('指定的数据库不存在，数据库错误'.mysql_error());
+			  mysql_query('SET NAMES UTF8') or die('字符集错误') ;  //如果数据中有中文需设置自字符集
+			  
+			  //第三步，从school数据库中 获取记录集 把grade表的内容提出来
+			  $query = "SELECT*FROM grade1";
+			  $result = @mysql_query($query,$conn) or die('sql错误:'.mysql_error()) ;//第二个参数可以放也可以部分，不放就是最近的一个  返回的也是资源
+			  //echo $result;//返回资源类型 $result就是记录集
+			  echo !!$result; //1
+			  
+			  //第四步，将记录集中的数据显示出来
+			   print_r(mysql_fetch_array($result,MYSQL_ASSOC)); //下标按字段名输出
+			 
+			  //print_r(mysql_fetch_array($result,MYSQL_NUM)); //下标按数字输出
+			 
+			  //第五步，释放记录集资源
+			  mysql_free_result($result);//也可以不写
+			  
+			  //最后，关闭数据库
+			  mysql_close($conn);
+		  
+		?>
+		
+		1.新增数据 2 条
+		 $query = "INSERT INTO grade (id,name,email,point,regtime) VALUES
+			 	(8,'lucina','lucina@163.com',88,NOW()),
+			 	(9,'bonny','bonny@163.com',90,NOW())	";
+		
+		  echo $query;
+		  @mysql_query($query) or die('新增错误'.mysql_error());
+	
+	  	2.更新数据 注意 要自己敲
+			$query = "UPDATE grade SET name='尼古拉' WHERE id=6 ";
+			@mysql_query($query) or die('数据库更新错误'.mysql_error());
+	 
+		3.删除数据 
+		 $query = "DELETE FROM grade WHERE id=6";
+		 @mysql_query($query) or die('删除错误'.mysql_error()); 
+		
+		4.输出数据
+		 $query = "SELECT id,name,email,point,regtime FROM grade";
+		 $result= @mysql_query($query) or die('SQL语句有误'.mysql_error());
+		 //把结果集转换成的数组赋给$row 如果有数据 就为真 !!是把$row资源型转为boolen
+		 while(!!$row = mysql_fetch_array($result)){
+		 	echo $row['id'].'---'.$row['name'].'---'.$row['email'];
+			echo '<br/>';
+		 }
+		
+		
+		三． 其他常用函数
+mysql_fetch_row()：从结果集中取得一行作为枚举数组
+mysql_fetch_assoc()： 从结果集中取得一行作为关联数组
+mysql_fetch_array()： 从结果集中取得一行作为关联数组，或数字数组，或二者兼有
+mysql_fetch_lengths()： 取得结果集中每个输出的长度
+mysql_field_name()： 取得结果中指定字段的字段名
+mysql_num_rows()： 取得结果集中行的数目
+mysql_num_fields()：取得结果集中字段的数目
+mysql_get_client_info()： 取得 MySQL 客户端信息
+mysql_get_host_info()： 取得 MySQL 主机信息
+mysql_get_proto_info()： 取得 MySQL 协议信息
+mysql_get_server_info()： 取得 MySQL 服务器信息
+		
+17.用户留言系统
+1.microtime() 返回时间戳 和 微秒数 相加就是当前时间
+2.usleep(2000000); //睡眠2秒 相当于settimeout()
+3.round(float,int)保留小数点到几位
+4.range(1,9) 返回一个数组 1-9
+  foreach(range(1,9) as $number){
+  	echo $number   //123456789
+  }	
+5.mt_rand(0,15) 随机数
+6.dechex(mt_rand(0,15))将10进制转为16进制 
+
+正则
+ 语法 描述
+ 量词：
+ + 匹配任何至少包含一个前导字符串
+ * 匹配任何包含零个或多个前导字符串
+ ? 匹配任何包含零个或一个前导字符串
+ . 匹配任意字符串
+ {x} 匹配任何包含 x 个前导字符串
+ {x,y} 匹配任何包含 x 到 y 个前导字符串
+ {x,} 匹配任何包含至少 x 个前导字符串
+ $ 匹配字符串的行尾
+ ^ 匹配字符串的行首
+ | 匹配字符串的左边或者右边
+ () 包围一个字符分组或定义个反引用，可以使用\1\2 提取
+
+ 元字符：
+ [a-z] 匹配任何包含小写字母 a-z的字符串
+ [A-Z] 匹配任何包含大写字母 A-Z的字符串
+ [0-9] 匹配任何包含数字 0-9 的字符串
+ [abc] 匹配任何包含小写字母 a、b、c的字符串
+ [^abc] 匹配任何不包含小写字母 a、b、c的字符串
+ [a-zA-Z0-9_] 匹配任何包含 a-zA-Z0-9 和下划线的字符串
+ \w 匹配任何包含 a-zA-Z0-9 和下划线的字符串（同上）
+ \W 匹配任何没有下划线和字母数字的字符串
+ \d 匹配任何数字字符，和[0-9]相同
+ \D 匹配任何非数字字符，和[^0-9]相同
+ \s 匹配任何空白字符
+ \S 匹配任何非空白字符
+ \b 匹配是否到达了单词边界
+ \B 匹配是否没有达到单词边界
+ \ 匹配正则中的特殊字符
+
+ 修饰符：
+ i 完成不区分大小写的搜索
+ m 在匹配首内容或者尾内容时候采用多行识别匹配
+ x 忽略正则中的空白
+ A 强制从头开始匹配
+ U 禁止贪婪匹配 只跟踪到最近的一个匹配符并结束
+
+ Perl
+ 风格函数
+ PHP 为使用 Perl 兼容的正则表达式搜索字符串提供了 7 个函数，包括：preg_grep()、
+ preg_match()、preg_match_all()、preg_auote()、preg_replace()、preg_replace_callback()和
+ preg_split()。
+ 搜索字符串：preg_grep()函数搜索数组中的所有元素，返回由与某个模式匹配的所有元
+ 素组成的数组。
+ <?php
+ $language = array('php','asp','jsp','python','ruby');
+ print_r(preg_grep('/p$/',$language));
+ ?>
+ 搜索模式： preg_match()函数在字符串中搜索模式， 如果存在则返回 true， 否则返回 false 。
+ <?php
+ echo preg_match('/php[1-6]/','php5');
+ ?>
+ 电子邮件验证小案例（分组应用）
+ <?php
+ $mode = '/([\w\.\_]{2,10})@(\w{1,}).([a-z]{2,4})/';
+ $string = 'yc60.com@gmail.com';
+ echo preg_match($mode,$string);
+ ?>
+ 匹配模式的所有出现：preg_match_all()函数在字符串中匹配模式的所有出现，然后将所
+ 有匹配到的全部放入数组。
+ <?php
+ preg_match_all('/php[1-6]/','php5sdfphp4sdflljkphp3sdlfjphp2',$out);
+ print_r($out);
+ ?>
+ 定界特殊的正则表达式：preg_quote()在每个对于正则表达式语法而言有特殊含义的字
+ 符前插入一个反斜线。这些特殊字符包含：$ ^ * () + = {} [] | \\ : <>。
+ <?php
+ echo preg_quote('PHP的价格是：$150');
+ ?>
+ 替换模式的所有出现：preg_replace()函数搜索到所有匹配，然后替换成想要的字符串返
+ 回出来。
+ <?php
+ echo preg_replace('/php[1-6]/','python','This is a php5,This is a php4');
+ ?>
+ ubb 小案例：贪婪问题+分组使用()
+ <?php
+ $mode = '/\[b\](.*)\[\/b\]/U';
+ $replace = '<strong>\1</strong>';
+ $string = 'This is a [b]php5[/b],This is a [b]php4[/b]';
+ echo preg_replace($mode,$replace,$string);
+ ?>
+ 以不区分大小写的方式将字符串划分为不同的元素：preg_split()用来分割不同的元素。
+ <?php
+ print_r(preg_split('/[\.@]/','yc60.com@gmail.com'));
+ ?>
+ 注： 目前为 PHP使用POSIX风格的正则表达式搜索字符串提供了7 个函数， 包括： ereg() 、
+ ereg_replace()、eregi()、eregi_replace()、split()、spliti()和 sql_regcase()。
+
 
 
 
