@@ -1,0 +1,254 @@
+1.php风格
+    ·简短风格：
+    <? echo "<p>My PHP!</p>"; ?>
+    ·Script 风格：
+    <script language= "php" >echo "<p>My PHP!</p>"; </script>
+2.向浏览器中输出：
+    echo()、print()、printf()、sprintf()
+    echo、print、printf 本身是函数，即函数()。但这里的输出函数可以省略括号，用空格+
+    所需显示的字符串或变量。
+    echo 和 print 功能几乎相同，而 echo 运行速度上比 print 稍稍快一点。因为 print 有返回值。
+    //echo 不返回任何值(void),print 返回的是整型(integer)
+
+    printf()和 sprintf()是 C 语言模式，例如:printf("我今天买了%d 套视频光盘",5);
+    print()返回值：整型
+    printf()返回值：字符串的长度
+    sprintf功能
+    //他们之间的不同点是,printf 返回的是整型(integer)，而 sprintf 返回的字符串(string)
+    //printf 可以在浏览器直接输出，而 sprintf 需要 echo 将它输出
+    
+    类型 描述
+    %b 整数，显示为二进制
+    %c 整数，显示为 ASCII 字符
+    %d 整数，显示为有符号十进制数
+    %f 浮点数，显示为浮点数
+    %o 整数，显示为八进制数
+    %s 字符串，显示为字符串
+    %u 整数，显示为无符号十进制数
+    %x 整数，显示为小写的十六进制数
+    %X 整数，显示为大写的十六进制数
+
+3.变量的数据类型
+    PHP 支持如下所示的基本数据类型：
+    Integer(整数) 、 Float(浮点数，也叫 Double,双精度) 、 String(字符串) 、 Boolean(布尔) 、
+    Array(数组)、Object(对象).
+    
+    创建变量的时候通过赋值来决定变量类型
+    
+    类型转换
+    使用类型转换，可以将一个变量或值转换成另一种类型。
+    $sum=0;
+    $total=(float)$sum;
+    
+    检测变量
+    大部分的可变函数都是用来测试一个函数的类型的。PHP 中有两个最常见的函数 ，分别是 gettype()和 settype()。
+    这两个函数返回的 string 类型，也就是变量的类型字符串。
+
+    isset()和 unset()用来判断一个变量是否存在，返回的是布尔值 true或 false。
+    empty()用来判断一个变量的值是否为空，如果为空则为 true否则为 false。
+    换句话说，""、0、"0"、NULL、FALSE、array()、var $var; 以及没有任何属性的
+    对象都将被认为是空的
+    
+    PHP 还提供了一些特定类型的测试函数。每一个函数都使用一个变量座位其参数 ，
+    并且返回 true或 false。
+    is_array() 、 is_double() 、 is_float() 、 is_real() 、 is_long() 、 is_int() 、 is_integer() 、 is_string() 、
+    is_object()、is_resource()、is_null()、is_numeric() 、is_callable() 判断是否是有效的函数名
+
+    可以通过调用一个函数来实现转换变量数据类型的目的。
+    intval()、floatval()、strval();setType(变量,类型) 
+    
+    超级全局变量：
+    $GLOBALS 所有全局变量数组
+    $_SERVER 服务器环境变量数组
+    $_GET 通过 GET 方法传递给该脚本的变量数组
+    $_POST 通过 POST方法传递给该脚本的变量数组
+    $_COOKIE cookie 变量数组
+    $_FILES 与文件上载相关的变量数组
+    $_ENV 环境变量数组
+    $_REQUEST 所有用户输入的变量数组
+    $_SESSION 会话变量数组
+    常量
+    常量一旦被定义之后，就不能再次更改。
+    define("TOTAL",199);
+
+4.转义序列 描述
+    \n 换行符
+    \r 回车
+    \t 水平制表图
+    \\ 反斜杠
+    \$ 美元符
+    \" 双引号
+
+5.算术操作符
+
+    前置递增递减和后置递增递减运算符：
+
+    算术操作符 
+    操作符 名称 示例
+    + 加 $a+$b
+    - 减 $a-$b
+    * 乘 $a*$b
+    / 除 $a/$b
+    % 取余 $a%$b
+
+    复合赋值操作符
+    操作符 使用方法 等价于
+    += $a+=$b $a=$a+$b
+    -= $a-=$b $a=$a-$b
+    *= $a*=$b $a=$a*$b
+    /= $a/=$b $a=$a/$b
+    %= $a%=$b $a=$a%$b
+    .= $a.=$b $a=$a.$b
+
+    $a=++$b;
+    $a=$b++;
+    $a=--$b;
+    $a=$b--;
+
+    比较运算符
+    操作符 名称 使用方法
+    
+    = = 等于 $a= =$b
+    = = = 恒等 $a= = =$b
+    != 不等 $a!=$b
+    != = 不恒等 $a!= =$b
+    <> 不等 $a<>$b
+    < 小于 $a<$b
+    > 大于 $a>$b
+    <= 小于等于 $a<=$b
+    >= 大于等于 $a>=$b
+    
+    注：恒等表示只有两边操作数相等并且数据类型也相当才返回 true;
+    例如：0= ="0" 这个返回为 true ，因为操作数相等
+    0= = ="0" 这个返回为 false，因为数据类型不同
+    逻辑运算符
+    操作符"and"和"or"比&&和||的优先级要低。
+
+    三元操作符
+    Condition ?value if true: value if false
+    示例：($grade>=50 ? "Passed" : "Failed")
+    
+    操作符 使用方法 使用方法 说明
+    ! 非 !$b        如果 $b 是 false,则    返回 true;否则相反
+    && 与 $a&&$b    如果 $a 和$b 都是    true,则结果为 true;    否则为 false
+    || 或 $a||$b    如果$a和$b中有一个为 true 或者都为true 时，其结果为true;否则为 false
+    and 与 $a and $b   与&& 相同，但其 优先级较低
+    or 或 $a or $b   与||相同，但其优先    级较低
+    
+    数组操作符
+     
+    操作符 使用方法 使用方法 说明
+    + 联合 !$b          返回一个包含了$a 和$b 中所有元素的数组
+    = = 等价 $a&&$b     如果$a 和$b 具有相同的元素，返回 true
+    = = = 恒等 $a||$b   如果$a 和$b 具有相同的元素以及相同的顺序，返回true
+    != 非等价 $aand $b  如果$a 和$b 不是等价的，返回 true
+    <> 非等价 如果$a 和$b 不是等价的，返回 true
+    != = 非恒等 $a or $b  如果$a 和$b 不是恒等的，返回 true
+
+6.随机数 rand([min],[max]) mt_rand([min],[max])
+7.数组：可通过实例来查看相应用法
+	range()函数自动创建一个数组
+	 
+    使用循环语句：因为相关数组的索引不是数字，因此无法使用 for 循环语句中使用一个
+    简单的计数器对数组进行操作。但是可以使用 foreach循环或 list()和 each()结构。
+    foreach ($ages as $key=>$value) {
+        echo $key."=>".$value."<br />";
+    }
+    使用 each()结构打印$ages 数组的内容：each()函数返回数组的当前元素，并将下一个元素作为当前元素。
+    while (!!$element=each($ages)) {
+        echo $element["key"];
+        echo "=>";
+        echo $element["value"];
+        echo "<br />";
+    }
+    使用 list()函数，可以用来将一个数组分解为一系列的值。可以按照如下方式将函数each()返回的两个值分开：
+    list($name,$age)=each($ages);
+    
+    确定唯一的数组元素：array_unique();它会删除掉里面相同值的元素。
+    置换数组键和值：array_flip();它会对调数组中的 key 和 value;
+    
+    sort()、asort()和 ksort()都是正向排序，当然也有相对应的反向排序 .
+    实现反向：rsort()、arsort()和 krsort()。
+    
+    函数 shuffle()将数组个元素进行随机排序。
+    函数 array_reverse()给出一个原来数组的反向排序。array_开头的函数一般会返回一个新数组
+    shuffle($pictures); 
+    array_reverse($pictures);
+    array_unshift($arr,'item1','item2')函数将新元素添加到数组头，返回 array 数组新的单元数目
+    array_push()函数将每个新元素添加到数组的末尾。
+    array_shift()删除数组头第一个元素，与其相反的函数是 
+    array_pop(),删除并返回数组末尾的一个元素。
+    array_rand()返回数组中的一个或多个键。
+    
+    五． 数组的指针操作
+    在数组中浏览：each()、current()、reset()、end()、next()、pos()、prev();
+    调用 next()或 each()将使指针前移一个元素。调用 each($array_name)会在指针前移一个
+    位置之前返回当前元素。next()函数则有些不同----调用 next($array_name)是将指针前移，然
+    后再返回新的当前元素。
+    要反向遍历一个数组，可以使用 end()和 prev()函数。prev()函数和 next()函数相反。它
+    是将当前指针往回移一个位置然后再返回新的当前元素。
+
+    六． 统计数组个数
+    count()和 sizeof()统计数组下标的个数
+    array_count_values() 统计数组中所有的值出现的次数 
+
+    七．将数组转换成标量变量： extract()
+    对于一个非数字索引数组，而该数组又有许多关键字-值对，可以使用函数 extract()将它们转换成一系列的标量变量。
+
+    extract()函数原型如下：
+    extract(array var_array,[int extract_type],[string prefix]);
+
+    函数 extract()的作用是通过一个数组创建一系列的标量变量，这些变量的名称必须是数组中关键字的名称，而变量值则是数组中的值。
+    $array=array("key1"=>"value1","key2"=>"value2","key3"=>"value3");
+    extract($array);
+    echo $key1.$key2.$key3;
+
+8.魔法常量
+    __FILE__ 当前文件名
+    __LINE__ 当前行号
+    __FUNCTION__ 当前函数名
+    __CLASS__ 当前类名
+    __METHOD__ 当前方法名
+	
+9.字符串处理
+    chop()函数移除字符串后面多余的空白，包括新行。
+    ltrim()函数移除字符串起始处多余空白。
+    rtrim()函数移除字符串后面多余的空白，包括新行，此函数是 chop()的别名。
+    trim()函数移除字符串两边多余的空白。
+    
+	htmlentities()和 htmlspecialchars 将html转为字符串。
+	如果想要去掉字符串中的 HTML 去掉，可以使用 strip_tags()函
+	
+    addslashes()后， 转义字符串 所有的引号都加了斜杠，而stripslashes()函数去掉了这些斜 杠
+
+    可以重新格式化字符串中的字母大小写。
+    strtoupper()函数将字符串转换为大写
+    strtolower()函数将字符串转换成小写
+    ucfirst()函数将第一个字母转换为大写
+    ucwords()函数将每个单词第一个字母转换为大写
+	
+	explode(分隔符,字符串) 切割字符串，返回数组
+	implode() join()是implode()的别名
+	 
+	
+10.数学运算
+	强制转换，可以在变量或值前面增加(int)、
+	(integer)、(float)、(double)或(real)实现，
+	也可以通过使用函数 intval()或 floatval() 来实现
+	
+	is_int()和is_float()用于检查具体的数据类型
+	is_numeric()
+	
+	abs() 绝对值
+	floor() 舍去法取整
+	ceil() 进一法取整
+	round() 四舍五入
+	min() 求最小值或数组中最小值
+	max() 求最大值数组中最大值
+	pi()
+	pow(2,4)
+	bcadd(2,5);	
+11.文件包含
+	include 'include.php';
+	include_once 'include.php';
+	require('require.php');

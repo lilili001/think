@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>php 计算器</title>
+	<style>
+	 
+	 </style>
+</head>
+<body>
+	<input type="text"  name="num1"/>
+	<select>
+		 <option value="+">+</option>
+		 <option value="-">-</option>
+		 <option value="*">*</option>
+		 <option value="/"></option>
+	</select>
+	<div></div>
+	<div></div>
+</body>
+</html>
