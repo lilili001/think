@@ -262,3 +262,5 @@
 	require('require.php');
     ucwords()函数将每个单词第一个字母转换为大写
 
+
+
